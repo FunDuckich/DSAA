@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace DSAA
 {
@@ -84,18 +85,16 @@ namespace DSAA
             Console.Write("Введите число B: ");
             int b = int.Parse(Console.ReadLine());
 
+            int maxAmountOfOddDigits = int.MinValue;
             for (int i = a % 2 != 0 ? a : a + 1; i <= b; i += 2)
             {
-                int num = i;
-                int amountOfDigits = 0;
+                int currentAmount = AmountOfOddDigits(i);
+                maxAmountOfOddDigits = currentAmount > maxAmountOfOddDigits ? currentAmount : maxAmountOfOddDigits;
+            }
 
-                while (num > 0)
-                {
-                    num /= 10;
-                    amountOfDigits++;
-                }
-
-                if (AmountOfOddDigits(i) == amountOfDigits)
+            for (int i = a % 2 != 0 ? a : a + 1; i <= b; i += 2)
+            {
+                if (AmountOfOddDigits(i) == maxAmountOfOddDigits)
                 {
                     Console.Write(i + " ");
                 }
@@ -227,7 +226,62 @@ namespace DSAA
                 Console.Write(val);
                 Console.Write(" ");
             }
+        }
 
+        #endregion
+
+        #region Пр7, VI 6
+
+        public static void Pr7Vi6()
+        {
+            Console.Write("Введите целое число n: ");
+            int n = int.Parse(Console.ReadLine());
+            int m = n;
+            Console.WriteLine("");
+            Console.WriteLine("Введите массив из целых чисел, разделённый пробелами, рамером n, n:");
+            int[][] massive = new int[n][];
+            HashSet<int> strokesForDeleting = new HashSet<int>();
+            for (int i = 0; i < n; i++)
+            {
+                massive[i] = new int[m];
+                bool noEvenInStoke = true;
+                string[] stroke = Console.ReadLine().Split();
+                for (int j = 0; j < m; j++)
+                {
+                    massive[i][j] = int.Parse(stroke[j]);
+                    if (massive[i][j] % 2 == 0)
+                    {
+                        noEvenInStoke = false;
+                    }
+                }
+
+                if (noEvenInStoke)
+                {
+                    strokesForDeleting.Add(i);
+                }
+            }
+
+            foreach (int stokeForDeleting in strokesForDeleting)
+            {
+                for (int i = stokeForDeleting; i < n - 1; i++)
+                {
+                    massive[i] = massive[i + 1];
+                }
+
+                n--;
+            }
+
+            Console.WriteLine();
+
+            for (int i = 0; i < n; i++)
+            {
+                foreach (int num in massive[i])
+                {
+                    Console.Write(num + " ");
+                }
+
+                Console.WriteLine();
+            }
         }
 
         #endregion
