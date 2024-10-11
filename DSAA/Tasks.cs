@@ -200,5 +200,36 @@ namespace DSAA
         }
 
         #endregion
+
+        #region Пр7, IV 1
+
+        public static void Pr7Iv1()
+        {
+            Console.Write("Введите целое число n: ");
+            int n = int.Parse(Console.ReadLine());
+            Console.WriteLine("");
+            int[] ans = new int[n];
+            Console.WriteLine("Введите массив из целых чисел, разделённый пробелами, рамером n, n:");
+            for (int i = 0; i < n; i++)
+            {
+                string[] stroke = Console.ReadLine().Split();
+                ans[i] = int.MinValue;
+
+                for (int j = 0; j < n; j++)
+                {
+                    int num = int.Parse(stroke[j]);
+                    ans[i] = num > ans[i] ? num : ans[i];
+                }
+            }
+
+            foreach (int val in ans)
+            {
+                Console.Write(val);
+                Console.Write(" ");
+            }
+
+        }
+
+        #endregion
     }
 }

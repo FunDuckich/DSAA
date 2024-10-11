@@ -4,3 +4,9 @@ C:\Users\petro\RiderProjects\DSAA\DSAA\obj\Debug\DSAA.csproj.AssemblyReference.c
 C:\Users\petro\RiderProjects\DSAA\DSAA\obj\Debug\DSAA.csproj.CoreCompileInputs.cache
 C:\Users\petro\RiderProjects\DSAA\DSAA\obj\Debug\DSAA.exe
 C:\Users\petro\RiderProjects\DSAA\DSAA\obj\Debug\DSAA.pdb
+C:\Users\petroved\source\repos\DSAA\DSAA\bin\Debug\DSAA.exe
+C:\Users\petroved\source\repos\DSAA\DSAA\bin\Debug\DSAA.pdb
+C:\Users\petroved\source\repos\DSAA\DSAA\obj\Debug\DSAA.csproj.AssemblyReference.cache
+C:\Users\petroved\source\repos\DSAA\DSAA\obj\Debug\DSAA.csproj.CoreCompileInputs.cache
+C:\Users\petroved\source\repos\DSAA\DSAA\obj\Debug\DSAA.exe
+C:\Users\petroved\source\repos\DSAA\DSAA\obj\Debug\DSAA.pdb
