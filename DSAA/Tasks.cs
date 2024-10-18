@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
 
 namespace DSAA
 {
@@ -85,19 +86,29 @@ namespace DSAA
             Console.Write("Введите число B: ");
             int b = int.Parse(Console.ReadLine());
 
+            int[] ans = new int[(b - a + 2) / 2];
+            int idx = 0;
             int maxAmountOfOddDigits = int.MinValue;
             for (int i = a % 2 != 0 ? a : a + 1; i <= b; i += 2)
             {
                 int currentAmount = AmountOfOddDigits(i);
-                maxAmountOfOddDigits = currentAmount > maxAmountOfOddDigits ? currentAmount : maxAmountOfOddDigits;
+
+                if (currentAmount > maxAmountOfOddDigits)
+                {
+                    maxAmountOfOddDigits = currentAmount;
+                    idx = 0;
+                }
+                
+                if (currentAmount == maxAmountOfOddDigits)
+                {
+                    ans[idx] = i;
+                    idx++;
+                }
             }
 
-            for (int i = a % 2 != 0 ? a : a + 1; i <= b; i += 2)
+            for (int i = 0; i < idx; i++)
             {
-                if (AmountOfOddDigits(i) == maxAmountOfOddDigits)
-                {
-                    Console.Write(i + " ");
-                }
+                Console.Write(ans[i] + " ");
             }
         }
 
@@ -189,7 +200,7 @@ namespace DSAA
 
             Console.Write("Введите число A: ");
             int a = int.Parse(Console.ReadLine());
-            Console.Write("Введите число B");
+            Console.Write("Введите число B: ");
             int b = int.Parse(Console.ReadLine());
 
             for (int i = a; i <= b; i++)
@@ -282,6 +293,30 @@ namespace DSAA
 
                 Console.WriteLine();
             }
+        }
+
+        #endregion
+
+        #region Пр8, III 1
+
+        public static void Pr8Iii1()
+        {
+            char[] separators = { ' ', ',', '.', '!', '?', ';', ':', '-' };
+            Console.Write("Введите строку: ");
+            string[] words = Console.ReadLine().Split(separators, StringSplitOptions.RemoveEmptyEntries);
+            Console.Write("Введите подстроку: ");
+            string substring = Console.ReadLine();
+
+            StringBuilder ans = new StringBuilder();
+            foreach (string word in words)
+            {
+                if (word.Contains(substring))
+                {
+                    ans.Append(word);
+                    ans.Append(' ');
+                }
+            }
+            Console.WriteLine(ans);
         }
 
         #endregion
