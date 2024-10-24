@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
 using System.Text;
 
 namespace DSAA
@@ -98,7 +100,7 @@ namespace DSAA
                     maxAmountOfOddDigits = currentAmount;
                     idx = 0;
                 }
-                
+
                 if (currentAmount == maxAmountOfOddDigits)
                 {
                     ans[idx] = i;
@@ -316,7 +318,183 @@ namespace DSAA
                     ans.Append(' ');
                 }
             }
+
             Console.WriteLine(ans);
+        }
+
+        #endregion
+
+        #region Пр9, II 1
+
+        public static void Pr9Ii1()
+        {
+            using (StreamReader inFile = new StreamReader(@"C:\Users\petro\RiderProjects\DSAA\DSAA\f.txt"))
+            {
+                using (StreamWriter outGFile = new StreamWriter(@"C:\Users\petro\RiderProjects\DSAA\DSAA\g.txt", false))
+                {
+                    using (StreamWriter outHFile =
+                           new StreamWriter(@"C:\Users\petro\RiderProjects\DSAA\DSAA\h.txt", false))
+                    {
+                        string line;
+                        while ((line = inFile.ReadLine()) != null)
+                        {
+                            int num = int.Parse(line);
+                            if (num % 2 == 0)
+                            {
+                                outGFile.WriteLine(line);
+                            }
+                            else
+                            {
+                                outHFile.WriteLine(line);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        #endregion
+
+        #region Пр 6.2, II 4
+
+        public static void Pr6Point2Ii4Straight()
+        {
+            string GetStroke()
+            {
+                Random rnd = new Random(666);
+                StringBuilder s = new StringBuilder(100009);
+                while (s.Length < 100000)
+                {
+                    s.Append(rnd.Next(100000000, 999999999).ToString());
+                }
+
+                s.Remove(100000, s.Length - 100000);
+
+                return s.ToString();
+            }
+
+            bool IsPalindrom(string s, int left, int right)
+            {
+                while (left <= right)
+                {
+                    if (s[left] != s[right])
+                    {
+                        return false;
+                    }
+
+                    ++left;
+                    --right;
+                }
+
+                return true;
+            }
+
+            string stroke = GetStroke();
+
+            int count = 0;
+            
+            Stopwatch timer = new Stopwatch();
+            timer.Start();
+            
+            for (int left = 0; left < stroke.Length; ++left)
+            {
+                for (int right = left + 1; right < stroke.Length; ++right)
+                {
+                    if (IsPalindrom(stroke, left, right))
+                    {
+                        ++count;
+                    }
+                }
+            }
+
+            timer.Stop();
+            
+            if (count == 0)
+            {
+                Console.WriteLine("Палиндромы не найдены");
+            }
+            else
+            {
+                Console.WriteLine("Количество палиндромов - {0}", count);
+            }
+
+            Console.WriteLine("Программа отработала за {0} милисекунд", timer.ElapsedMilliseconds);
+        }
+
+        public static void Pr6Point2Ii4Hash()
+        {
+            string GetStroke()
+            {
+                Random rnd = new Random(666);
+                StringBuilder s = new StringBuilder(100009);
+                while (s.Length < 100000)
+                {
+                    s.Append(rnd.Next(100000000, 999999999).ToString());
+                }
+
+                s.Remove(100000, s.Length - 100000);
+
+                return s.ToString();
+            }
+
+            const long mod = 1000000007;
+            const int bas = 31;
+
+            string stroke = GetStroke();
+            int n = stroke.Length;
+
+            long[] hashForward = new long[n + 1];
+            long[] hashReverse = new long[n + 1];
+            long[] powers = new long[n + 1];
+
+            bool IsPalindrome(int l, int r)
+            {
+                long hashF = (hashForward[r + 1] - (hashForward[l] * powers[r - l + 1]) % mod + mod) % mod;
+                long hashR = (hashReverse[n - l] - (hashReverse[n - r - 1] * powers[r - l + 1]) % mod + mod) % mod;
+                return hashF == hashR;
+            }
+
+            Stopwatch timer = new Stopwatch();
+            timer.Start();
+
+            powers[0] = 1;
+            for (int i = 1; i <= n; i++)
+            {
+                powers[i] = (powers[i - 1] * bas) % mod;
+            }
+
+            for (int i = 0; i < n; i++)
+            {
+                hashForward[i + 1] = (hashForward[i] * bas + stroke[i]) % mod;
+                hashReverse[i + 1] = (hashReverse[i] * bas + stroke[n - i - 1]) % mod;
+            }
+
+            int count = 0;
+
+            for (int i = 0; i < n; i++)
+            {
+                for (int j = i; j < n; j++)
+                {
+                    if (IsPalindrome(i, j))
+                    {
+                        count++;
+                    }
+                }
+            }
+
+            timer.Stop();
+
+            Console.WriteLine();
+            if (count == 0)
+            {
+                Console.WriteLine("Палиндромы не найдены");
+            }
+            else
+            {
+                Console.WriteLine("Количество палиндромов - {0}", count);
+            }
+
+            Console.WriteLine("Программа отработала за {0} милисекунд", timer.ElapsedMilliseconds);
         }
 
         #endregion
