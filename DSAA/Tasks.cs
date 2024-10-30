@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -371,6 +372,78 @@ namespace DSAA
                     }
                 }
             }
+        }
+
+        #endregion
+
+        #region Пр14, I 1
+
+        private readonly struct SPoint
+        {
+            private readonly int _x, _y;
+            private readonly double _distance;
+
+            public SPoint(int x, int y)
+            {
+                this._x = x;
+                this._y = y;
+                this._distance = Math.Sqrt(_x * _x + _y * _y);
+            }
+
+            public double GetDistance()
+            {
+                return _distance;
+            }
+
+            public override string ToString()
+            {
+                return "(" + _x + ", " + _y + ")";
+            }
+        }
+
+        public static void Pr14I1()
+        {
+            using (StreamReader inp = new StreamReader(@"C:\Users\petro\RiderProjects\DSAA\DSAA\Pr14I1(in).txt"))
+            {
+                string line;
+                ArrayList points = new ArrayList();
+                char[] seps = new[] { ' ', '\n', '\t', '\r' };
+                while ((line = inp.ReadLine()) != null)
+                {
+                    string[] split = line.Split(seps, StringSplitOptions.RemoveEmptyEntries);
+                    points.Add(new SPoint(int.Parse(split[0]), int.Parse(split[1])));
+                }
+
+                ArrayList answ = new ArrayList();
+                double maxDistance = double.MinValue;
+                foreach (SPoint point in points)
+                {
+                    if (point.GetDistance() > maxDistance)
+                    {
+                        answ.Clear();
+                        maxDistance = point.GetDistance();
+                        answ.Add(point);
+                    }
+                    else if (point.GetDistance().Equals(maxDistance))
+                    {
+                        answ.Add(point);
+                    }
+                }
+
+                foreach (SPoint point in answ)
+                {
+                    Console.WriteLine(point);
+                }
+            }
+        }
+
+        #endregion
+
+        #region Пр14, II 1
+
+        public static void Pr14Ii1()
+        {
+            
         }
 
         #endregion

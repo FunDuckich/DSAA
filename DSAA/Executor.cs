@@ -6,7 +6,7 @@ namespace DSAA
     {
         public static void Main(string[] args)
         {
-            Tasks.Pr9Ii1();
+            Tasks.Pr14I1();
         }
     }
 }
