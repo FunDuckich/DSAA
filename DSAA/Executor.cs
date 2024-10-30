@@ -6,9 +6,7 @@ namespace DSAA
     {
         public static void Main(string[] args)
         {
-            
-            
-            // string voidInp = Console.ReadLine();
+            Tasks.Pr9Ii1();
         }
     }
 }

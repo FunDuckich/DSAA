@@ -303,7 +303,7 @@ namespace DSAA
 
         public static void Pr8Iii1()
         {
-            char[] separators = { ' ', ',', '.', '!', '?', ';', ':', '-' };
+            char[] separators = { ' ', ',', '.', '!', '?', ';', ':', '-', '\n', '\t', '\r' };
             Console.Write("Введите строку: ");
             string[] words = Console.ReadLine().Split(separators, StringSplitOptions.RemoveEmptyEntries);
             Console.Write("Введите подстроку: ");
@@ -338,14 +338,34 @@ namespace DSAA
                         string line;
                         while ((line = inFile.ReadLine()) != null)
                         {
-                            int num = int.Parse(line);
-                            if (num % 2 == 0)
+                            int i = 0;
+                            int j = 1;
+                            while (j < line.Length)
                             {
-                                outGFile.WriteLine(line);
-                            }
-                            else
-                            {
-                                outHFile.WriteLine(line);
+                                if (!char.IsDigit(line[i]))
+                                {
+                                    i++;
+                                    j++;
+                                }
+                                else if (char.IsDigit(line[j]))
+                                {
+                                    j++;
+                                }
+                                else
+                                {
+                                    int num = int.Parse(line.Substring(i, j - i));
+                                    if (num % 2 == 0)
+                                    {
+                                        outGFile.WriteLine(num);
+                                    }
+                                    else
+                                    {
+                                        outHFile.WriteLine(num);
+                                    }
+
+                                    i = j;
+                                    j++;
+                                }
                             }
                         }
                     }
@@ -372,53 +392,6 @@ namespace DSAA
 
                 return s.ToString();
             }
-
-            bool IsPalindrom(string s, int left, int right)
-            {
-                while (left <= right)
-                {
-                    if (s[left] != s[right])
-                    {
-                        return false;
-                    }
-
-                    ++left;
-                    --right;
-                }
-
-                return true;
-            }
-
-            string stroke = GetStroke();
-
-            int count = 0;
-            
-            Stopwatch timer = new Stopwatch();
-            timer.Start();
-            
-            for (int left = 0; left < stroke.Length; ++left)
-            {
-                for (int right = left + 1; right < stroke.Length; ++right)
-                {
-                    if (IsPalindrom(stroke, left, right))
-                    {
-                        ++count;
-                    }
-                }
-            }
-
-            timer.Stop();
-            
-            if (count == 0)
-            {
-                Console.WriteLine("Палиндромы не найдены");
-            }
-            else
-            {
-                Console.WriteLine("Количество палиндромов - {0}", count);
-            }
-
-            Console.WriteLine("Программа отработала за {0} милисекунд", timer.ElapsedMilliseconds);
         }
 
         public static void Pr6Point2Ii4Hash()
@@ -436,65 +409,6 @@ namespace DSAA
 
                 return s.ToString();
             }
-
-            const long mod = 1000000007;
-            const int bas = 31;
-
-            string stroke = GetStroke();
-            int n = stroke.Length;
-
-            long[] hashForward = new long[n + 1];
-            long[] hashReverse = new long[n + 1];
-            long[] powers = new long[n + 1];
-
-            bool IsPalindrome(int l, int r)
-            {
-                long hashF = (hashForward[r + 1] - (hashForward[l] * powers[r - l + 1]) % mod + mod) % mod;
-                long hashR = (hashReverse[n - l] - (hashReverse[n - r - 1] * powers[r - l + 1]) % mod + mod) % mod;
-                return hashF == hashR;
-            }
-
-            Stopwatch timer = new Stopwatch();
-            timer.Start();
-
-            powers[0] = 1;
-            for (int i = 1; i <= n; i++)
-            {
-                powers[i] = (powers[i - 1] * bas) % mod;
-            }
-
-            for (int i = 0; i < n; i++)
-            {
-                hashForward[i + 1] = (hashForward[i] * bas + stroke[i]) % mod;
-                hashReverse[i + 1] = (hashReverse[i] * bas + stroke[n - i - 1]) % mod;
-            }
-
-            int count = 0;
-
-            for (int i = 0; i < n; i++)
-            {
-                for (int j = i; j < n; j++)
-                {
-                    if (IsPalindrome(i, j))
-                    {
-                        count++;
-                    }
-                }
-            }
-
-            timer.Stop();
-
-            Console.WriteLine();
-            if (count == 0)
-            {
-                Console.WriteLine("Палиндромы не найдены");
-            }
-            else
-            {
-                Console.WriteLine("Количество палиндромов - {0}", count);
-            }
-
-            Console.WriteLine("Программа отработала за {0} милисекунд", timer.ElapsedMilliseconds);
         }
 
         #endregion
