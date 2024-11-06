@@ -46,6 +46,7 @@
   <ItemGroup>
     <Content Include="f.txt" />
     <Content Include="Pr14I1(in).txt" />
+    <Content Include="Pr14Ii1(in).txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

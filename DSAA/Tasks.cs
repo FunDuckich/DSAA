@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace DSAA
 {
@@ -339,33 +340,16 @@ namespace DSAA
                         string line;
                         while ((line = inFile.ReadLine()) != null)
                         {
-                            int i = 0;
-                            int j = 1;
-                            while (j < line.Length)
+                            foreach (Match match in Regex.Matches(line, @"-?\d+"))
                             {
-                                if (!char.IsDigit(line[i]))
+                                int num = int.Parse(match.Value);
+                                if (num % 2 == 0)
                                 {
-                                    i++;
-                                    j++;
-                                }
-                                else if (char.IsDigit(line[j]))
-                                {
-                                    j++;
+                                    outGFile.WriteLine(num);
                                 }
                                 else
                                 {
-                                    int num = int.Parse(line.Substring(i, j - i));
-                                    if (num % 2 == 0)
-                                    {
-                                        outGFile.WriteLine(num);
-                                    }
-                                    else
-                                    {
-                                        outHFile.WriteLine(num);
-                                    }
-
-                                    i = j;
-                                    j++;
+                                    outHFile.WriteLine(num);
                                 }
                             }
                         }
@@ -441,9 +425,82 @@ namespace DSAA
 
         #region Пр14, II 1
 
+        private readonly struct Student : IComparable<Student>
+        {
+            private readonly string _fullName;
+            private readonly DateTime _birthDay;
+            private readonly string _address;
+            private readonly string _school;
+
+            public Student(string fullName, DateTime birthDay, string address, string school)
+            {
+                this._fullName = fullName;
+                this._birthDay = birthDay;
+                this._address = address;
+                this._school = school;
+            }
+
+            public DateTime GetBirthDay()
+            {
+                return _birthDay;
+            }
+
+            public string GetSchool()
+            {
+                return _school;
+            }
+
+            public int CompareTo(Student other)
+            {
+                return DateTime.Compare(this._birthDay, other.GetBirthDay());
+            }
+
+            public override string ToString()
+            {
+                return _fullName + ", окончивший школу " + _school + ", родился " + _birthDay.Date.Day + "." +
+                       (_birthDay.Date.Month < 10 ? ("0" + _birthDay.Date.Month) : _birthDay.Date.Month.ToString()) +
+                       "." + _birthDay.Date.Year +
+                       ", проживает по адресу: " + _address;
+            }
+        }
+
         public static void Pr14Ii1()
         {
-            
+            using (StreamReader inF = new StreamReader(@"C:\Users\petro\RiderProjects\DSAA\DSAA\Pr14Ii1(in).txt"))
+            {
+                using (StreamWriter outFw =
+                       new StreamWriter(@"C:\Users\petro\RiderProjects\DSAA\DSAA\Pr14Ii1(out).txt"))
+                {
+                    ArrayList students = new ArrayList();
+                    string line;
+                    while ((line = inF.ReadLine()) != null)
+                    {
+                        string[] data = line.Split(';');
+                        string[] date = data[1].Trim().Split('.');
+                        DateTime currentBirthDay =
+                            new DateTime(int.Parse(date[2].Trim()), int.Parse(date[1].Trim()),
+                                int.Parse(date[0].Trim()));
+                        students.Add(new Student(data[0].Trim(), currentBirthDay, data[2].Trim(), data[3].Trim()));
+                    }
+
+                    Console.Write("Введите школу: ");
+                    string inSchool = Console.ReadLine();
+                    List<Student> inCurrentSchool = new List<Student>();
+                    foreach (Student student in students)
+                    {
+                        if (student.GetSchool().Equals(inSchool))
+                        {
+                            inCurrentSchool.Add(student);
+                        }
+                    }
+
+                    inCurrentSchool.Sort();
+                    foreach (Student student in inCurrentSchool)
+                    {
+                        outFw.WriteLine(student);
+                    }
+                }
+            }
         }
 
         #endregion
