@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 
@@ -505,6 +506,127 @@ namespace DSAA
 
         #endregion
 
+        #region Пр15, I 11 и 12
+
+        public static void Pr15I11And12()
+        {
+            using (StreamReader inF = new StreamReader(@"C:\Users\petro\RiderProjects\DSAA\DSAA\Pr15I11(in).txt"))
+            {
+                using (StreamWriter outF =
+                       new StreamWriter(@"C:\Users\petro\RiderProjects\DSAA\DSAA\Pr15I11(out).txt", false))
+                {
+                    List<int> nums = new List<int>();
+                    string line;
+                    while ((line = inF.ReadLine()) != null)
+                    {
+                        nums.Add(int.Parse(line));
+                    }
+
+                    var invertedPositivesLinq =
+                        from num in nums
+                        where num > 0 && (int) Math.Log10(num) + 1 == 2
+                        select -num;
+
+                    var invertedNegativesMethods =
+                        nums.Where(num => num < 0 && (int) Math.Log10(-num) + 1 == 3).Select(num => -num);
+
+                    outF.WriteLine("Linq");
+                    foreach (var item in invertedPositivesLinq)
+                    {
+                        outF.WriteLine(item);
+                    }
+
+                    outF.WriteLine("\nMethods");
+                    foreach (var item in invertedNegativesMethods)
+                    {
+                        outF.WriteLine(item);
+                    }
+                }
+            }
+        }
+
+        #endregion
+
+        #region Пр15, II 11 и 12
+
+        private readonly struct InventoryProduct
+        {
+            private readonly string _type;
+            private readonly int _cost;
+            private readonly string _sort;
+            private readonly int _count;
+
+            public InventoryProduct(string type, int cost, string sort, int count)
+            {
+                this._type = type;
+                this._cost = cost;
+                this._sort = sort;
+                this._count = count;
+            }
+
+            public int GetCount()
+            {
+                return _count;
+            }
+
+            public string GetItemType()
+            {
+                return _type;
+            }
+
+            public override string ToString()
+            {
+                return _type + " " + _sort + " по цене " + _cost + " находится на складе в количестве " + _count +
+                       " штук";
+            }
+        }
+
+        public static void Pr15Ii11And12()
+        {
+            using (StreamReader inF = new StreamReader(@"C:\Users\petro\RiderProjects\DSAA\DSAA\Pr15Ii11(in).txt"))
+            {
+                using (StreamWriter outF =
+                       new StreamWriter(@"C:\Users\petro\RiderProjects\DSAA\DSAA\Pr15Ii11(out).txt", false))
+                {
+                    List<InventoryProduct> warehouseItems = new List<InventoryProduct>();
+                    string line;
+                    while ((line = inF.ReadLine()) != null)
+                    {
+                        string[] itemData = line.Split(' ');
+                        InventoryProduct item = new InventoryProduct(itemData[0], int.Parse(itemData[1]), itemData[2],
+                            int.Parse(itemData[3]));
+                        warehouseItems.Add(item);
+                    }
+
+                    Console.Write("Введите границу кол-ва товара: ");
+                    int borderCount = int.Parse(Console.ReadLine());
+
+                    var filteredItemsLinq =
+                        from item in warehouseItems
+                        where item.GetCount() < borderCount
+                        orderby item.GetCount()
+                        select item;
+
+                    var filteredItemsMethods =
+                        warehouseItems.Where(item => item.GetCount() > borderCount).OrderBy(item => item.GetItemType());
+
+                    outF.WriteLine("Linq");
+                    foreach (var item in filteredItemsLinq)
+                    {
+                        outF.WriteLine(item);
+                    }
+
+                    outF.WriteLine("\nMethods");
+                    foreach (var item in filteredItemsMethods)
+                    {
+                        outF.WriteLine(item);
+                    }
+                }
+            }
+        }
+
+        #endregion
+
         #region Пр 6.2, II 4
 
         public static void Pr6Point2Ii4Straight()
@@ -519,7 +641,6 @@ namespace DSAA
                 }
 
                 s.Remove(100000, s.Length - 100000);
-
                 return s.ToString();
             }
         }
@@ -536,7 +657,6 @@ namespace DSAA
                 }
 
                 s.Remove(100000, s.Length - 100000);
-
                 return s.ToString();
             }
         }
