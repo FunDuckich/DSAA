@@ -627,7 +627,7 @@ namespace DSAA
 
         #endregion
 
-        #region Пр 6.2, II 4
+        #region Пр6.2, II 4
 
         public static void Pr6Point2Ii4Straight()
         {
@@ -659,6 +659,118 @@ namespace DSAA
                 s.Remove(100000, s.Length - 100000);
                 return s.ToString();
             }
+        }
+
+        #endregion
+
+        #region Пр17, 10
+
+        private class DateOperator
+        {
+            private DateTime date;
+
+            public DateOperator()
+            {
+                this.date = DateTime.Today;
+            }
+
+            public DateOperator(int day, int month, int year)
+            {
+                this.date = new DateTime(year, month, day);
+            }
+
+            public DateOperator(DateOperator other)
+            {
+                this.date = other.Date;
+            }
+
+            public DateTime Date
+            {
+                get
+                {
+                    return date;
+                }
+                set
+                {
+                    this.date = value;
+                }
+            }
+
+            public bool IsYearBissextile
+            {
+                get
+                {
+                    return date.Year % 4 == 0;
+                }
+            }
+
+            public DateTime PreviousDate
+            {
+                get
+                {
+                    return date.AddDays(-1);
+                }
+            }
+            
+            public DateTime NextDate
+            {
+                get
+                {
+                    return date.AddDays(1);
+                }
+            }
+
+            public int DaysUntilNextMonth
+            {
+                get
+                {
+                    return DateTime.DaysInMonth(date.Year, date.Month) - date.Day;
+                }
+            }
+
+            public DateTime this[int dayShift]
+            {
+                get
+                {
+                    return date.AddDays(dayShift);
+                }
+            }
+
+            public override string ToString()
+            {
+                return date.ToShortDateString();
+            }
+
+            public override int GetHashCode()
+            {
+                return date.Day.GetHashCode() + date.Month.GetHashCode() + date.Year.GetHashCode();
+            }
+
+            public override bool Equals(object obj)
+            {
+                if (obj == null)
+                {
+                    return false;
+                }
+                if (this == obj)
+                {
+                    return true;
+                }
+                if (obj is DateOperator)
+                {
+                    DateOperator other = (DateOperator)obj;
+                    return date.Equals(other.Date);
+                }
+                return false;
+            }
+        }
+
+        public static void Pr1710()
+        {
+            DateOperator first = new DateOperator();
+            Console.WriteLine(first.PreviousDate);
+            Console.WriteLine(first[-2]);
+            Console.WriteLine(first[5]);
         }
 
         #endregion
